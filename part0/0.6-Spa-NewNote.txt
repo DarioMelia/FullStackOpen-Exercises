@@ -1,6 +1,7 @@
 title 0.6: Spa New note
 
 browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
 note over browser:
 When the form is submitted, the browser does two things:
 1-Makes a POST request to .../new_note_spa that sends the new note to the server
