@@ -2,9 +2,9 @@ import Part from "./Part.js";
 
 const Content = (prompts) => (
   <>
-    <Part part={prompts.parts[0]} exercises={prompts.exercises[0]} />
-    <Part part={prompts.parts[1]} exercises={prompts.exercises[1]} />
-    <Part part={prompts.parts[2]} exercises={prompts.exercises[2]} />
+    <Part part={prompts.part1.name} exercises={prompts.part1.exercises} />
+    <Part part={prompts.part2.name} exercises={prompts.part2.exercises} />
+    <Part part={prompts.part3.name} exercises={prompts.part3.exercises} />
   </>
 );
 
