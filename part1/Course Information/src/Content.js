@@ -1,11 +1,14 @@
 import Part from "./Part.js";
 
-const Content = (prompts) => (
-  <>
-    <Part part={prompts.part1.name} exercises={prompts.part1.exercises} />
-    <Part part={prompts.part2.name} exercises={prompts.part2.exercises} />
-    <Part part={prompts.part3.name} exercises={prompts.part3.exercises} />
-  </>
-);
+const Content = (prompts) => {
+  const [p1, p2, p3] = prompts.parts;
+  return (
+    <>
+      <Part part={p1.name} exercises={p1.exercises} />
+      <Part part={p2.name} exercises={p2.exercises} />
+      <Part part={p3.name} exercises={p3.exercises} />
+    </>
+  );
+};
 
 export default Content;
