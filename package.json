@@ -1,0 +1,19 @@
+{
+  "name": "fullstackopen-exercises",
+  "version": "1.0.0",
+  "description": "Exercises to submit for de FullStack open online course.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DarioMelia/FullStackOpen-Exercises.git"
+  },
+  "author": "Dario Melia Basus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DarioMelia/FullStackOpen-Exercises/issues"
+  },
+  "homepage": "https://github.com/DarioMelia/FullStackOpen-Exercises#readme"
+}
