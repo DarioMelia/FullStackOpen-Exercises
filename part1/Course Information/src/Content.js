@@ -1,14 +1,10 @@
+import Part from "./Part.js";
+
 const Content = (prompts) => (
   <>
-    <p>
-      {prompts.parts[0]} {prompts.exercises[0]}
-    </p>
-    <p>
-    {prompts.parts[1]} {prompts.exercises[1]}
-    </p>
-    <p>
-    {prompts.parts[2]} {prompts.exercises[2]}
-    </p>
+    <Part part={prompts.parts[0]} exercises={prompts.exercises[0]} />
+    <Part part={prompts.parts[1]} exercises={prompts.exercises[1]} />
+    <Part part={prompts.parts[2]} exercises={prompts.exercises[2]} />
   </>
 );
 
