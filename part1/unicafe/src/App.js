@@ -5,13 +5,16 @@ const App = ()=>{
   const[neutral, setNeutral] = useState(0);
   const[bad, setBad] = useState(0);
 
-  let allFeedBack = good + neutral + bad;
-  let average = getAverage();
-  let positive = getPositivePer();
+  
+  
+  const stats = {
+    good,
+    neutral,
+    bad
+  }
 
 
-  function getAverage(){return (good + (bad * -1))/allFeedBack};
-  function getPositivePer(){return (good / allFeedBack) * 100};
+
 
   const handleClick = (reviewType) =>{
     switch(reviewType){
@@ -28,6 +31,22 @@ const App = ()=>{
     <Button onClick={handleClick("g")} text="good"></Button>
     <Button onClick={handleClick("n")} text="neutral"></Button>
     <Button onClick={handleClick("b")} text="bad"></Button>
+    <Statistics stats={stats}></Statistics>
+   
+    </>
+  )
+}
+
+const Button = ({onClick, text}) => <button onClick={onClick}>{text}</button>
+const Statistics = ({stats}) =>{
+  const{good,neutral,bad} = stats;
+  let allFeedBack = good + neutral + bad;
+  let average = getAverage();
+  let positive = getPositivePer();
+  function getAverage(){return (good + (bad * -1))/allFeedBack};
+  function getPositivePer(){return (good / allFeedBack) * 100};
+  return(
+    <>
     <h1>Statistics</h1>
     <p>good {good}</p>
     <p>neutral {neutral}</p>
@@ -39,5 +58,4 @@ const App = ()=>{
   )
 }
 
-const Button = ({onClick, text}) => <button onClick={onClick}>{text}</button>
 export default App;
