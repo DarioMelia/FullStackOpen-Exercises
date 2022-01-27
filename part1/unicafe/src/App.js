@@ -5,6 +5,14 @@ const App = ()=>{
   const[neutral, setNeutral] = useState(0);
   const[bad, setBad] = useState(0);
 
+  let allFeedBack = good + neutral + bad;
+  let average = getAverage();
+  let positive = getPositivePer();
+
+
+  function getAverage(){return (good + (bad * -1))/allFeedBack};
+  function getPositivePer(){return (good / allFeedBack) * 100};
+
   const handleClick = (reviewType) =>{
     switch(reviewType){
       case "g": return () => setGood(good + 1)       
@@ -24,6 +32,9 @@ const App = ()=>{
     <p>good {good}</p>
     <p>neutral {neutral}</p>
     <p>bad {bad}</p>
+    <p>all {allFeedBack}</p>
+    <p>average {average}</p>
+    <p>positive {positive}%</p>
     </>
   )
 }
