@@ -36,27 +36,24 @@ const App = () => {
 };
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
+const StatLine = ({text, value}) => <p>{text} {value}</p>;
 const Statistics = ({ stats }) => {
   const { good, neutral, bad } = stats;
   let allFeedBack = good + neutral + bad;
   let average = getAverage();
   let positive = getPositivePer();
-  function getAverage() {
-    return (good + bad * -1) / allFeedBack;
-  }
-  function getPositivePer() {
-    return (good / allFeedBack) * 100;
-  }
+  function getAverage() {return (good + bad * -1) / allFeedBack;}
+  function getPositivePer() {return (good / allFeedBack) * 100;}
   if (allFeedBack !== 0) {
     return (
       <>
         <h1>Statistics</h1>
-        <p>good {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
-        <p>all {allFeedBack}</p>
-        <p>average {average}</p>
-        <p>positive {positive}%</p>
+        <StatLine text="good" value={good}/>
+        <StatLine text="neutral" value={neutral}/>
+        <StatLine text="bad" value={bad}/>
+        <StatLine text="all" value={allFeedBack}/>
+        <StatLine text="average" value={average}/>
+        <StatLine text="positive" value={positive.toString().concat("%")}/>
       </>
     );
   } else {
