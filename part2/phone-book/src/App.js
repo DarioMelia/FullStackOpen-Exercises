@@ -11,15 +11,17 @@ const App = () => {
   const onChange = e => setNewName(e.target.value);
   const onSubmit = e =>{
     e.preventDefault();
-    setPersons(persons.concat({name:newName}));
+    nameExists()
+      ?alert(`${newName} is already added to the phone book`)
+      :setPersons(persons.concat({name:newName}));
   }
-
+  const nameExists = ()=> persons.find(el => el.name === newName);
+  
   return (
     <div>
       <h2>Phonebook</h2>
       <Form onSubmit={onSubmit} onChange={onChange} newName={newName}/>
       <NumbersDis persons={persons}/>
-      
     </div>
   )
 }
