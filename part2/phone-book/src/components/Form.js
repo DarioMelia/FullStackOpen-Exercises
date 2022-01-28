@@ -3,6 +3,7 @@ const Form = ({onSubmit,onChange, newName, newNum})=>(
     <form onSubmit={onSubmit}>
     <div>
       name: <input type="text" onChange={onChange} value={newName}/>
+      <br/>
       number: <input type="number" onChange={onChange} value={newNum}/>
     </div>
     <div>
