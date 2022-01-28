@@ -1,8 +1,9 @@
 import React from "react";
-const Form = ({onSubmit,onChange, newName})=>(
+const Form = ({onSubmit,onChange, newName, newNum})=>(
     <form onSubmit={onSubmit}>
     <div>
-      name: <input onChange={onChange} value={newName}/>
+      name: <input type="text" onChange={onChange} value={newName}/>
+      number: <input type="number" onChange={onChange} value={newNum}/>
     </div>
     <div>
       <button type="submit">add</button>
