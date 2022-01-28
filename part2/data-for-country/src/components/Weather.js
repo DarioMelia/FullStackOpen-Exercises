@@ -20,7 +20,6 @@ const Weather = ({city}) =>{
 
     useEffect(getWeather,[]);
         
-
     function getWeather(){
         axios.get(url).then(res => setWeather(res.data))
     }
