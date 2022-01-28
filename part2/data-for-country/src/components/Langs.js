@@ -4,7 +4,7 @@ const Langs = ({languages})=>{
         languages.map(lang => <li key={lang.iso639_2}>{lang.name}</li>)
     
     return(<>
-        <h2>Languages</h2>
+        <h2>Spoken languages</h2>
         {grtList()}
     </>)
 }

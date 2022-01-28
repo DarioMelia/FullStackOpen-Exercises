@@ -1,17 +1,20 @@
 import React from "react";
 // Components
 import Langs from "./Langs";
+import Weather from "./Weather";
+import Stat from "./Stat";
 const Country = ({country})=>{
-    console.log('country', country)
     const{name,capital,population,languages,flags} = country;
     
     return(<>
         <h1>{name}</h1>
-        <p><strong>capital</strong> {capital}</p>
-        <p><strong>population</strong> {population}</p>
+        <Stat label="capital" text={capital}/>
+        <br/>
+        <Stat label="population" text={population}/>
         <Langs languages={languages}/>
         <br></br>
         <Flag src={flags.png} name={name}/>
+        <Weather city={capital}/>
 
         </>)
 }

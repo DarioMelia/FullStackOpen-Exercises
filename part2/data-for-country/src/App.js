@@ -17,7 +17,7 @@ function App() {
     const country = cntrToShow.find(country => country.alpha2Code === e.target.getAttribute("data-id"));
     setFilter(country.name);
   }
-
+                                         
   // API
   function getCountries(){
     axios.get("https://restcountries.com/v2/all")
