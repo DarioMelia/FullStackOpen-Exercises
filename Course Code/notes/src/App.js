@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 
 import Note from "./components/Note";
 import Form from "./components/Form";
 
-const App = ({ ogNotes }) => {
-  const [notes, setNotes] = useState(ogNotes);
+const App = () => {
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("This is a note");
   const [showAll, setShowAll] = useState(true);
 
+  useEffect(getNotes, []);
+  
   const notesToShow = showAll ? notes : notes.filter(note => note.important);
 
   const generateNotes = () =>
@@ -16,7 +19,6 @@ const App = ({ ogNotes }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     setNotes(notes.concat(newNoteObj()));
-    console.log(notes[notes.length-1])
   };
 
   function newNoteObj() {
@@ -26,6 +28,12 @@ const App = ({ ogNotes }) => {
       date: new Date().toISOString(),
       important: Math.random() > 0.5,
     };
+  }
+
+  function getNotes(){
+    axios
+      .get('http://localhost:3001/notes')
+      .then(res =>setNotes(res.data));
   }
 
   return (
