@@ -14,27 +14,49 @@ const App = () => {
   const [selected, setSelected] = useState(0);
   const [points,setPoints] = useState(new Array(anecdotes.length).fill(0));
 
-  function randomIdx(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-  }
+  // %% FUNCTIONS %%
+  const randomIdx=(min, max) => Math.floor(Math.random() * (max - min)) + min;
   const randomQuote = () => setSelected(randomIdx(0, anecdotes.length));
   const vote = () => setPoints(points.map((point, i) => {
     if(i === selected) return point + 1;
     return point;
-  }))
+  }));
+  const mostVotes = ()=>{
+    const mostVoted = {
+      points:0,
+      i:0
+    }
+    points.forEach((points, i) => {
+      if(points > mostVoted.points) {
+        mostVoted.points = points;
+        mostVoted.i = i;
+      }
+    })
+    return mostVoted.i
+  }
   
   
   
   return (
     <div>
-      <h2>{anecdotes[selected]}</h2>
-      <p>Has {points[selected]} votes</p>
+      <h1>Anecdote of the day</h1>
+      <Anecdote anecdote={anecdotes[selected]} points={points[selected]}/>
       <Button onClick={vote} text="vote"/>
       <Button onClick={randomQuote} text="Next anecdote"/>
+      <br/>
+      <h1>Anecdote with most votes</h1>
+      <Anecdote anecdote={anecdotes[mostVotes()]} points={points[mostVotes()]}/>
     </div>
   )
 }
 
+// %% COMPONENTS %%
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
+const Anecdote = ({anecdote, points}) => (
+  <>
+      <h2>{anecdote}</h2>
+      <p>Has {points} votes</p>
+  </>
+)
 
 export default App
