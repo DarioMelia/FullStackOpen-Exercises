@@ -6,13 +6,18 @@ function App() {
   const[filter, setFilter] = useState("");
   const[countries, setCountries] = useState([]);
 
-  let cntrToShow = countries.filter((country) =>
+  var cntrToShow = countries.filter((country) =>
     country.name.toLowerCase().includes(filter.toLowerCase())
   );
   
   useEffect(getCountries,[]);
   // ---- EVENT HANDLERS ----
   const onChange = e => setFilter(e.target.value); 
+  const showCountryInfo = e => {
+    const country = cntrToShow.find(country => country.alpha2Code === e.target.getAttribute("data-id"));
+    setFilter(country.name);
+  }
+
   // API
   function getCountries(){
     axios.get("https://restcountries.com/v2/all")
@@ -21,7 +26,7 @@ function App() {
   return (
     <>
       <Filter onChange={onChange} value={filter}></Filter>
-      <Countries countries={cntrToShow} filter={filter}/>
+      <Countries countries={cntrToShow} showCountryInfo={showCountryInfo}/>
     </>
   );
 }
