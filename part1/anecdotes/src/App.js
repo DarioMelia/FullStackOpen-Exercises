@@ -12,17 +12,24 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0);
+  const [points,setPoints] = useState(new Array(anecdotes.length).fill(0));
 
   function randomIdx(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
   }
   const randomQuote = () => setSelected(randomIdx(0, anecdotes.length));
+  const vote = () => setPoints(points.map((point, i) => {
+    if(i === selected) return point + 1;
+    return point;
+  }))
   
   
   
   return (
     <div>
       <h2>{anecdotes[selected]}</h2>
+      <p>Has {points[selected]} votes</p>
+      <Button onClick={vote} text="vote"/>
       <Button onClick={randomQuote} text="Next anecdote"/>
     </div>
   )
