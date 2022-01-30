@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
+import noteService from './services/notes';
 import Note from "./components/Note";
 import Form from "./components/Form";
 
@@ -9,32 +10,47 @@ const App = () => {
   const [newNote, setNewNote] = useState("This is a note");
   const [showAll, setShowAll] = useState(true);
 
-  useEffect(getNotes, []);
+  useEffect(()=>noteService.getAll().then(initalNotes =>setNotes(initalNotes)), []);
   
   const notesToShow = showAll ? notes : notes.filter(note => note.important);
+  
+  // %% EVENT HANDLERS %%
+  const toggleImportanceOf = id =>{
+    const note = notes.find(n => n.id === id);
+    const changedNote = {...note, important: !note.important};
 
-  const generateNotes = () =>
-    notesToShow.map((note) => <Note text={note.content} key={note.id} />);
+    noteService.update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+      })
+      .catch(err => {
+        console.log(err);
+        alert(`The note "${note.content} was already deleted from the server"`);
+        setNotes(notes.filter(n => n.id !== id));
+      })
+  }
   const onChange = (e) => setNewNote(e.target.value);
   const onSubmit = (e) => {
     e.preventDefault();
-    setNotes(notes.concat(newNoteObj()));
-  };
+    noteService.create(newNoteObj()).then(returnedNote => {
+      setNotes(notes.concat(returnedNote))
+      setNewNote("")
+    })};
 
+  // %% HELPER FUNCS %%
+  function generateNotes(){
+  return notesToShow.map((note) => 
+  <Note note={note} toggleImportance={() => toggleImportanceOf(note.id)} key={note.id} />
+  )};
+  
   function newNoteObj() {
     return {
-      id: notes.length + 1,
       content: newNote,
       date: new Date().toISOString(),
-      important: Math.random() > 0.5,
+      important: false,
     };
   }
 
-  function getNotes(){
-    axios
-      .get('http://localhost:3001/notes')
-      .then(res =>setNotes(res.data));
-  }
 
   return (
     <div>
