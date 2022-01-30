@@ -1,26 +1,6 @@
 {
   "persons": [
     {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
-      "name": "Sara Alvarez",
-      "number": "123456789",
-      "id": 6
-    },
-    {
       "name": "Felipe Perez",
       "number": "741852963",
       "id": 7
@@ -32,13 +12,23 @@
     },
     {
       "name": "Dario Melia",
-      "number": "789456123",
+      "number": "789789",
       "id": 9
     },
     {
       "name": "Ramiro Montana",
       "number": "9517538426",
       "id": 10
+    },
+    {
+      "name": "Sara Alvarez",
+      "number": "55555",
+      "id": 12
+    },
+    {
+      "name": "Diego Alifa",
+      "number": "195762438",
+      "id": 13
     }
   ]
 }

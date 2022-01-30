@@ -11,9 +11,14 @@ const create = (newPerObj) =>{
                 .then(res => res.data)
 }
 
+const update = (newPerObj, id) =>{
+  return axios.put(`${baseUrl}/${id}`, newPerObj)
+              .then(res => res.data)
+}
+
 const deleteEntry = id =>{
     return axios.delete(`${baseUrl}/${id}`)
                 .then(res=> res.data)
 }
 
-export default {getAll, create, deleteEntry};
+export default {getAll, create, deleteEntry, update};

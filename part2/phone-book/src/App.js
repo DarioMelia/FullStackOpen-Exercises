@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect} from "react";
 import axios from "axios";
 
 // %%% API %%%
@@ -14,9 +14,11 @@ const App = () => {
   const [newNum, setNewNum] = useState("");
   const [filter, setFilter] = useState("");
 
-  useEffect(getPeople,[])
-  console.log(persons);
-  let numsToShow = persons.filter((num) =>num.name.toLowerCase().includes(filter.toLowerCase()));
+  useEffect(getPeople, []);
+
+  let numsToShow = persons.filter((num) =>
+    num.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
   // %% EVENT HANDLERS %%
   const onChange = (e) =>
@@ -26,37 +28,59 @@ const App = () => {
   const onFilterChange = (e) => setFilter(e.target.value);
   const onSubmit = (e) => {
     e.preventDefault();
-    nameExists()
-      ? alert(`${newName} is already added to the phone book`)
-      : createNewPerson();
+    nameExists() ? changeNumber() : createNewPerson();
   };
-  const delEntryOf = id =>{
-    const objToDel = persons.find(p => p.id === id);
-    if(window.confirm(`Delete ${objToDel.name}?`)){
-      perServ.deleteEntry(id).then(res => 
-                setPersons(persons.filter(p => p.id !== id)))
-             .catch(err => console.log(err))
-    }  
-  }
+  const delEntryOf = (id) => {
+    const objToDel = persons.find((p) => p.id === id);
+    if (window.confirm(`Delete ${objToDel.name}?`)) {
+      perServ
+        .deleteEntry(id)
+        .then((res) => setPersons(persons.filter((p) => p.id !== id)))
+        .catch((err) => console.log(err));
+    }
+  };
 
   // %% HELPER FUNCS %%
-  function getPeople(){
-    perServ.getAll().then(initialPersons => setPersons(initialPersons))
-           .catch(err => console.log(err));
+  function getPeople() {
+    perServ
+      .getAll()
+      .then((initialPersons) => setPersons(initialPersons))
+      .catch((err) => console.log(err));
   }
-  function createNewPerson(){
-    const newObj ={ name: newName, number: newNum };
-    perServ.create(newObj)
-           .then(returnedObj => {
-             setPersons(persons.concat(returnedObj));
-             setNewName("");
-             setNewNum("");
-            })
-            .catch(err => console.log(err))
+  function createNewPerson() {
+    const newObj = { name: newName, number: newNum };
+    perServ
+      .create(newObj)
+      .then((returnedObj) => {
+        setPersons(persons.concat(returnedObj));
+        resetInputs();
+      })
+      .catch((err) => console.log(err));
   }
-  const nameExists = () => persons.find((el) => el.name === newName);
+  function changeNumber() {
+    const currentPerson = persons.find((p) => p.name.toLowerCase() === newName.toLowerCase());
+    const changeYes = window.confirm(`${currentPerson.name} is already added to the phone book, replace the old number with a newOne?`);
+    const updated = { ...currentPerson, number: newNum };
+    if (changeYes) {
+      perServ
+        .update(updated, currentPerson.id)
+        .then((returnObj) =>
+          setPersons(
+            persons.map((p) => (p.id === returnObj.id ? returnObj : p))
+          )
+        );
+    }
+    resetInputs();
+  }
 
-  
+  function resetInputs() {
+    setNewName("");
+    setNewNum("");
+  }
+
+  const nameExists = () => persons.find((el) => el.name.toLowerCase() === newName.toLowerCase());
+
+  // %% RETURN JSX %%
   return (
     <div>
       <h2>Phonebook</h2>
