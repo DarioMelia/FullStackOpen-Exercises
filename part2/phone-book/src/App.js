@@ -28,11 +28,14 @@ const App = () => {
     e.target.type === "text"
       ? setNewName(e.target.value)
       : setNewNum(e.target.value);
+
   const onFilterChange = (e) => setFilter(e.target.value);
+
   const onSubmit = (e) => {
     e.preventDefault();
     nameExists() ? changeNumber() : createNewPerson();
   };
+  
   const delEntryOf = (id) => {
     const objToDel = persons.find((p) => p.id === id);
     if (window.confirm(`Delete ${objToDel.name}?`)) {
