@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
-
 import noteService from './services/notes';
+import "./index.css";
+
+// %% COMPONENTS %%
 import Note from "./components/Note";
 import Form from "./components/Form";
+import ErrorNot from "./components/ErrorNot";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("This is a note");
   const [showAll, setShowAll] = useState(true);
+  const [errMsg, setErrMsg] = useState(null);
 
   useEffect(()=>noteService.getAll().then(initalNotes =>setNotes(initalNotes)), []);
   
@@ -25,7 +28,10 @@ const App = () => {
       })
       .catch(err => {
         console.log(err);
-        alert(`The note "${note.content} was already deleted from the server"`);
+        setErrMsg(`The note "${note.content}" was already deleted from the server`);
+        setTimeout(() => {
+          setErrMsg(null)
+        }, 5000)
         setNotes(notes.filter(n => n.id !== id));
       })
   }
@@ -55,15 +61,29 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <ErrorNot msg={errMsg}/>
       <div>
         <button onClick={() => setShowAll(!showAll)}>show {showAll?"important":"all"}</button>
       </div>
       <ul>{generateNotes()}</ul>
       <Form onChange={onChange} onSubmit={onSubmit} newNote={newNote} />
+      <Footer/>
     </div>
   );
 };
 
 // COMPONENTS
-
+const Footer = () => {
+  const footerStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    fontSize: 16
+  }
+  return (
+    <div style={footerStyle}>
+      <br />
+      <em>Note app, Department of Computer Science, University of Helsinki 2021</em>
+    </div>
+  )
+}
 export default App;
