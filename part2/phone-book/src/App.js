@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from "react";
+import "./index.css";
 
 // %%% API %%%
 import perServ from "./services/persons";
@@ -6,13 +7,16 @@ import perServ from "./services/persons";
 // %%% COMPONENTS %%%
 import Form from "./components/Form";
 import NumbersDis from "./components/NumberDis";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
   const [filter, setFilter] = useState("");
-
+  const [notMsg, setNotMsg] = useState(null);
+  const [isErr, setIsErr] = useState(false);
+  
   useEffect(getPeople, []);
 
   let numsToShow = persons.filter((num) =>
@@ -35,7 +39,13 @@ const App = () => {
       perServ
         .deleteEntry(id)
         .then((res) => setPersons(persons.filter((p) => p.id !== id)))
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err)
+          setIsErr(true)
+          setPersons(persons.filter((p) => p.id !== id))
+          setNotMsg(`Information of ${objToDel.name} has already been removed from server`)
+          resetNot()
+        });
     }
   };
 
@@ -53,6 +63,9 @@ const App = () => {
       .then((returnedObj) => {
         setPersons(persons.concat(returnedObj));
         resetInputs();
+        setIsErr(false)
+        setNotMsg(`Added ${returnedObj.name}`)
+        resetNot();
       })
       .catch((err) => console.log(err));
   }
@@ -63,11 +76,20 @@ const App = () => {
     if (changeYes) {
       perServ
         .update(updated, currentPerson.id)
-        .then((returnObj) =>
-          setPersons(
-            persons.map((p) => (p.id === returnObj.id ? returnObj : p))
-          )
-        );
+        .then((returnObj) =>{
+          setPersons(persons.map((p) => (p.id === returnObj.id ? returnObj : p)))
+          setIsErr(false)
+          setNotMsg(`Updated ${returnObj.name}'s number`);
+          resetNot();
+        })
+        .catch((err) =>{
+          console.log(err)
+          setIsErr(true)
+          setPersons(persons.filter((p) => p.name !== updated.name))
+          setNotMsg(`Information of ${updated.name} has already been removed from server`)
+          resetNot()
+
+        })
     }
     resetInputs();
   }
@@ -76,6 +98,9 @@ const App = () => {
     setNewName("");
     setNewNum("");
   }
+  function resetNot(){
+    setTimeout(()=>setNotMsg(null),5000)
+  }
 
   const nameExists = () => persons.find((el) => el.name.toLowerCase() === newName.toLowerCase());
 
@@ -83,6 +108,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification msg={notMsg} isErr={isErr}/>
       <Form
         onSubmit={onSubmit}
         onChange={onChange}
