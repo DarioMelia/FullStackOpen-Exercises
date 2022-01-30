@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import axios from "axios";
 
 // %%% API %%%
@@ -15,7 +15,7 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(getPeople,[])
-  
+  console.log(persons);
   let numsToShow = persons.filter((num) =>num.name.toLowerCase().includes(filter.toLowerCase()));
 
   // %% EVENT HANDLERS %%
@@ -30,18 +30,29 @@ const App = () => {
       ? alert(`${newName} is already added to the phone book`)
       : createNewPerson();
   };
+  const delEntryOf = id =>{
+    const objToDel = persons.find(p => p.id === id);
+    if(window.confirm(`Delete ${objToDel.name}?`)){
+      perServ.deleteEntry(id).then(res => 
+                setPersons(persons.filter(p => p.id !== id)))
+             .catch(err => console.log(err))
+    }  
+  }
 
   // %% HELPER FUNCS %%
   function getPeople(){
-    perServ.getAll().then(initialPersons => setPersons(initialPersons));
+    perServ.getAll().then(initialPersons => setPersons(initialPersons))
+           .catch(err => console.log(err));
   }
   function createNewPerson(){
     const newObj ={ name: newName, number: newNum };
     perServ.create(newObj)
            .then(returnedObj => {
-             setPersons(persons.concat(returnedObj))});
+             setPersons(persons.concat(returnedObj));
              setNewName("");
              setNewNum("");
+            })
+            .catch(err => console.log(err))
   }
   const nameExists = () => persons.find((el) => el.name === newName);
 
@@ -59,6 +70,7 @@ const App = () => {
         persons={numsToShow}
         filter={filter}
         onFilterChange={onFilterChange}
+        delEntryOf={delEntryOf}
       />
     </div>
   );

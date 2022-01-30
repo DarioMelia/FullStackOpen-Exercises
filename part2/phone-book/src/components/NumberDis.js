@@ -1,7 +1,7 @@
 import React from "react";
-const NumbersDis = ({ persons, filter, onFilterChange }) => {
+const NumbersDis = ({ persons, filter, onFilterChange,delEntryOf }) => {
   const gnrtNums = () =>
-    persons.map((person) => <NumberItm key={person.name} person={person} />);
+    persons.map((person) => <NumberItm key={person.name} person={person} delEntry={delEntryOf} />);
 
   return (
     <>
@@ -15,9 +15,9 @@ const NumbersDis = ({ persons, filter, onFilterChange }) => {
     </>
   );
 };
-const NumberItm = ({ person }) => (
+const NumberItm = ({ person,delEntry }) => (
   <p>
-    {person.name} {person.number}
+    {person.name} {person.number} <button onClick={() => delEntry(person.id)}>delete</button>
   </p>
 );
 const Filter = ({ type, filter, onFilterChange }) => (

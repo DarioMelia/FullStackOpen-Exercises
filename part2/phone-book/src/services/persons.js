@@ -11,4 +11,9 @@ const create = (newPerObj) =>{
                 .then(res => res.data)
 }
 
-export default {getAll, create};
+const deleteEntry = id =>{
+    return axios.delete(`${baseUrl}/${id}`)
+                .then(res=> res.data)
+}
+
+export default {getAll, create, deleteEntry};
