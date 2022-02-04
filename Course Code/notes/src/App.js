@@ -7,6 +7,7 @@ import Note from "./components/Note";
 import Form from "./components/Form";
 import ErrorNot from "./components/ErrorNot";
 
+
 const App = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("This is a note");
@@ -35,6 +36,20 @@ const App = () => {
         setNotes(notes.filter(n => n.id !== id));
       })
   }
+  const deleteNote = id =>{
+    const note = notes.find(n => n.id === Number(id))
+    noteService.deleteNote(id).then(()=>{
+      console.log(`Succesfuly delted note: "${note.content}"`)
+      setNotes(notes.filter(n => n.id !== id))
+    }).catch(err =>{
+      console.log(err);
+        setErrMsg(`The note "${note.content}" was already deleted from the server`);
+        setTimeout(() => {
+          setErrMsg(null)
+        }, 5000)
+        setNotes(notes.filter(n => n.id !== id))
+    })
+  }
   const onChange = (e) => setNewNote(e.target.value);
   const onSubmit = (e) => {
     e.preventDefault();
@@ -46,7 +61,7 @@ const App = () => {
   // %% HELPER FUNCS %%
   function generateNotes(){
   return notesToShow.map((note) => 
-  <Note note={note} toggleImportance={() => toggleImportanceOf(note.id)} key={note.id} />
+  <Note note={note} deleteNote={()=> deleteNote(note.id)}toggleImportance={() => toggleImportanceOf(note.id)} key={note.id} />
   )};
   
   function newNoteObj() {
