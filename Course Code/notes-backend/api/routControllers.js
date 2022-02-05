@@ -1,57 +1,65 @@
-const fs = require('fs');
-const fileName = './notes.json';
-let notes = require(fileName);
+const {getNotesDb,getNoteDb,addNoteDb,deleteNoteDb,updateNoteDb} = require("../mongo/dbHandlers");
+let notes;
+
 
 exports.getNotes = (req, res) =>{
-    res.send(notes)
-}
-
-exports.getNote = (req, res) =>{
-    const id = Number(req.params.id);
-    const note = notes.find(note => note.id === id);
-    if(note)res.send(JSON.stringify(note))
-    res.status(404).end()
+    getNotesDb().then(result =>{
+        notes = [...result]
+        res.send(JSON.stringify(result))
+    }).catch(err=>{
+        console.log(err)
+        res.status(500).json(err)
+    })
     
 }
 
-exports.deleteNote = (req,res) =>{
-    const id = Number(req.params.id);
-    notes = notes.filter(note => note.id !== id);
-    updateJSON(notes);
-    res.status(204).end()
+exports.getNote = (req, res,next) =>{
+    const id = req.params.id;
+    getNoteDb(id).then(note =>{
+        if(!note)res.status(404).end()
+        res.send(JSON.stringify(note))
+    }).catch(err=>next(err))
+}
+
+exports.deleteNote = (req,res,next) =>{
+    const id = req.params.id;
+    deleteNoteDb(id).then(delNote =>{
+        notes = notes.filter(note => note.id !== id)
+        res.status(204).end()
+    }).catch(err => next(err)) 
 }
 
 exports.addNote = (req,res) =>{
-    const {content, important} = req.body;
+    const {content} = req.body;
     if(!content){
         return res.status(404).json({
             error: "content missing"
         })
     }
-    const note = {
-        id: generateId(),
-        content: content,
-        date: new Date(),
-        important:important
-    }
-
-    notes = notes.concat(note);
-    updateJSON(notes);
-    res.json(note);
+    const note = {content}
+    addNoteDb(note).then(note=>{
+        if(!note)res.status(404).json({
+            error:"note missing"
+        })
+        notes = notes.concat(note);
+        res.status(201).json(note)
+    }).catch(err=>{
+        console.log(err)
+        res.status(500).json(err)
+    })
 }
 
-// %%%%%% HELPER FUNCS %%%%%%%%
-const generateId = () => {
-    const maxId = notes.length > 0
-      ? Math.max(...notes.map(n => n.id))
-      : 0
-    return maxId + 1
+exports.updateNote = (req,res,next) =>{
+    const id = req.params.id;
+    const {content,important} = req.body;
+    const updatedNote = {content,important};
+    updateNoteDb(id, updatedNote).then(note =>{
+        res.status(200).json(note)
+    }).catch(err=>next(err))
+
+
+
 }
 
-const updateJSON = (newNotes) =>{
-    fs.writeFile("./api/notes.json", JSON.stringify(newNotes), function writeJSON(err) {
-        if (err) return console.log(err);
-        // console.log(JSON.stringify(newNotes));
-        // console.log('writing to ' + fileName);
-      });
-}
+
+

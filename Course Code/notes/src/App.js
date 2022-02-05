@@ -37,7 +37,7 @@ const App = () => {
       })
   }
   const deleteNote = id =>{
-    const note = notes.find(n => n.id === Number(id))
+    const note = notes.find(n => n.id === id)
     noteService.deleteNote(id).then(()=>{
       console.log(`Succesfuly delted note: "${note.content}"`)
       setNotes(notes.filter(n => n.id !== id))
